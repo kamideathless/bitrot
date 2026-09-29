@@ -357,7 +357,7 @@ server/
   db.mjs     node:sqlite        replay.mjs  server-side re-simulation
   config.mjs environment
 
-tests/     163 node:test cases
+tests/     164 node:test cases
 tools/     tune.mjs (balance)  shots.mjs (headless screenshots)  portraits.mjs  check.mjs  headless.mjs
 ```
 
@@ -369,12 +369,12 @@ All audio is generated live by a small square-wave synth (`src/core/audio.js`) �
 
 ```bash
 npm run check   # import every module, then the full test suite
-npm test        # 163 tests
+npm test        # 164 tests
 npm run tune    # balance harness: arena fill rates + scripted full runs
 npm run shots   # regenerate docs/*.png headlessly
 ```
 
-**Status: 163/163 passing.** No mocks anywhere — the server tests drive the real HTTP server on an
+**Status: 164/164 passing.** No mocks anywhere — the server tests drive the real HTTP server on an
 ephemeral port against an in-memory database.
 
 | Area | What is asserted |

@@ -32,7 +32,7 @@ Requires Node.js 22.5+ (for the built-in `node:sqlite`). No build step, no `node
 git clone https://github.com/kamideathless/bitrot.git
 cd bitrot
 npm start          # landing page, game and API on http://127.0.0.1:4173/
-npm test           # 163 tests, including the full server suite
+npm test           # 164 tests, including the full server suite
 ```
 
 For a public deployment:
@@ -172,6 +172,49 @@ the specific Friend you chose to save. That gives a token sink a collection narr
 fee, and it scales naturally: rarer Friends cost more and are worth more, duplicates feed the faucet
 back, and the two sinks compete for the same wallet.
 
+### Does this inflate the $RAREFRIENDS supply?
+
+No — and it is worth being precise about why, because "burn" claims are cheap.
+
+**Today the supply is untouched because the game never touches it.** BITROT mints and burns nothing
+on any chain. RF here is an integer column in the game's own SQLite, scoped to one account. Total
+$RAREFRIENDS in existence before and after a dive is identical. The burn ledger is an accounting
+record of tokens destroyed *inside the simulation*, and every screen that shows a balance says so.
+
+Inside the simulation, play does create RF. That is a faucet, and pretending otherwise would be
+nonsense. The real question is what happens when that faucet is wired to a live token — and the
+answer is that it never becomes a mint:
+
+**1. The faucet is a funded reserve, not an issuance.** In production, rewards are paid *out of* a
+pre-funded prize reserve — the same backing model the reference Fishing submission uses — while
+restoration burns to an unrecoverable address. The loop is `reserve → player → burn`, so circulating
+supply only ever moves **down**. No game action calls `mint`. When the reserve empties, payouts
+stop; they do not print.
+
+**2. The reserve, not the farming rate, is the cap.** This is what makes "you can farm forever" a
+non-issue. However fast anyone farms, nobody can extract more than the reserve holds. Emission is
+bounded in absolute terms by a funding decision made up front, not by game balance holding.
+
+**3. The per-dive faucet is bounded, which is what makes the reserve pricable.** A dive cannot run
+forever: the input trace has a hard 600-second ceiling and the server enforces it on replay
+(`tests/invariants.test.js` asserts every dive terminates inside that window). Inside those 600s the
+spawners are rate-limited too — one shard replacement per 0.5s, one capsule per 19s, one defrag per
+40s, sector 14 at the deepest. Multiplied out, **no single dive can pay more than ~7 400 RF**, and
+that bound assumes taking a shard every half second for ten minutes without being touched once. Real
+best play is ~475. Submissions are additionally capped server-side at 20 per account per minute.
+
+**4. The sink scales with the thing players actually want.** Restoration cost rises per 10%
+(`×(1 + 2.4 × progress)`) and by rarity (up to 4.5×), and the perk only activates at 100% — so the
+most-wanted outcome is also the most expensive. One GENESIS Friend at ~1 220 RF costs more than two
+and a half fully-geared dives, and the collection never stops asking: there are 200 160 distinct
+Friends.
+
+**The honest limitation:** in this build a player who only buys upgrades takes more out of the faucet
+than they put into the burn. Upgrades are a **spend**, not a burn — RF leaves the player, and in a
+production build would return to the reserve rather than being destroyed. Net destruction comes from
+restoration alone. Making that ratio reliably positive is a reserve-funding and pricing exercise, and
+it is deliberately left as one rather than hard-coded into a hackathon MVP.
+
 ## How it uses Rare Friends
 
 Every Friend is derived from a **6-hex-digit id**: form, crest, optics, vox, gear, marking, rarity,
@@ -200,11 +243,11 @@ and server-side score validation.
 
 ```sh
 npm run check   # imports every module, then the full suite
-npm test        # 163 tests (node:test, no dependencies)
+npm test        # 164 tests (node:test, no dependencies)
 npm run tune    # balance harness
 ```
 
-**163/163 passing**, with no mocks — the server tests drive the real HTTP server on an ephemeral
+**164/164 passing**, with no mocks — the server tests drive the real HTTP server on an ephemeral
 port against an in-memory database, and the integration tests drive the actual play scene through a
 real dive and submission. The suite covers the automaton (walls never eaten, rot never shrinks, scars block
 rebirth then expire, purge respects the wall ring), the economy (costs rise, purchases are immutable
@@ -226,6 +269,11 @@ Measured 12.1ms average frame time (worst 13.1ms) during a dive.
 - **Offline progress is a sandbox and is discarded** when the server is next reachable. Signposted
   in the HUD, on the report screen and in the terminal footer.
 - **The recovery key is the only way back into an account** — no email, so no reset.
+- **Replay proves the inputs, not the player.** The server proves a dive really was produced by the
+  submitted inputs, which kills fabricated scores and currency — but it cannot prove a human pressed
+  them. A scripted optimal pilot is indistinguishable from an excellent one. A live economy would
+  need that handled separately (proof of humanity, or per-account reserve draw limits); the reserve
+  cap above is what keeps it from being a supply problem rather than a leaderboard one.
 - Rate limits are per-process and in memory; a multi-instance deployment would need them shared.
 - Replay cost is bounded per request and rate-limited, but there is no global work queue.
 - No moderation tooling beyond a `banned` column.
