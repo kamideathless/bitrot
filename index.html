@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<title>BITROT — a Rare Friends rescue</title>
+<meta name="description" content="A 1-bit cellular-automaton arcade game. Dive into a decaying archive, purge the spreading rot, and burn simulated $RAREFRIENDS to rebuild the pixels it ate.">
+<meta property="og:title" content="BITROT — a Rare Friends rescue">
+<meta property="og:description" content="The archive is decaying. Purge the static, rescue the Friends, burn RF to restore their pixels.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="docs/01-title.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%23111'/><path fill='%23eee' d='M1 1h2v2H1zM5 1h2v2H5zM3 3h2v2H3zM1 5h2v2H1zM5 5h2v2H5z'/></svg>">
+<link rel="stylesheet" href="landing.css">
+</head>
+<body>
+
+<header id="nav">
+  <div class="mark" data-text="BITROT" data-scale="2" aria-hidden="true"></div>
+  <span class="sr-only">BITROT</span>
+  <nav>
+    <a href="#rot">The rot</a>
+    <a href="#dive">The dive</a>
+    <a href="#friends">Friends</a>
+    <a href="#economy">Economy</a>
+    <a href="#tech">Build</a>
+  </nav>
+  <a class="btn small solid" href="play.html"><span>Play</span></a>
+  <div id="scrollbar"></div>
+</header>
+
+<main>
+
+  <!-- ------------------------------------------------------------- hero -->
+  <section id="hero">
+    <canvas id="hero-field" class="pixel" aria-hidden="true"></canvas>
+    <div class="hero-inner">
+      <h1 id="wordmark" data-text="BITROT" data-scale="8"><span class="sr-only">BITROT</span></h1>
+      <p class="kicker">The archive is decaying</p>
+      <p class="lede">
+        Rare Friends are stored on failing media. Bits flip, and flipped bits spread.
+        You are the last process still running inside — <b>dive in, hold back the rot,
+        and pull Friends out before they are overwritten.</b>
+      </p>
+      <div class="cta">
+        <a class="btn solid" href="play.html"><span>Enter the archive</span></a>
+        <a class="btn ghost" href="#rot"><span>How it works</span></a>
+      </div>
+      <p class="sim">Simulated economy · no wallet · no install · plays in the browser</p>
+      <p class="byline">
+        Built for the <a href="https://github.com/spokesz/rarefriends-vibeathon" target="_blank" rel="noopener">Rare Friends Vibeathon</a>
+        by <a href="https://x.com/kamiyahame" target="_blank" rel="noopener">kamiyahame</a>
+      </p>
+    </div>
+    <div id="cue" aria-hidden="true"><i></i>Scroll</div>
+  </section>
+
+  <!-- -------------------------------------------------------------- rot -->
+  <section id="rot">
+    <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">01 — Why it is different</p>
+        <div class="head" data-text="TWO IDEAS" data-scale="5"></div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="duo">
+        <article class="card d1" data-reveal>
+          <h3>The arena is an automaton</h3>
+          <p>
+            Every generation, a clean cell may rot — and the chance climbs steeply with how many
+            rotten neighbours it has. Rot never dies on its own. Purging clears a disc and
+            <strong>scars</strong> the ground so it cannot be reborn for a while. The board is
+            something you garden, not something you dodge.
+          </p>
+          <div class="demo">
+            <canvas id="demo-arena" class="pixel" aria-label="A live simulation of the rot automaton with periodic purges"></canvas>
+            <div class="demo-label">
+              <span>Live · decay <b id="demo-coverage">0%</b></span>
+              <span>purges fired <b id="demo-purges">0</b></span>
+            </div>
+          </div>
+        </article>
+
+        <article class="card d2" data-reveal>
+          <h3>Burning rebuilds pixels</h3>
+          <p>
+            Every Friend you rescue arrives corrupted — the pixels missing from the portrait are the
+            pixels the rot ate. Burning RF restores them ten percent at a time, in an order fixed per
+            Friend, and those tokens are destroyed. <strong>You can see exactly what the burn
+            bought.</strong>
+          </p>
+          <div class="demo">
+            <div class="demo-stage">
+              <canvas id="demo-burn" class="pixel" aria-label="A corrupted Friend portrait rebuilding itself as RF is burned"></canvas>
+            </div>
+            <div class="demo-label">
+              <span>Integrity <b id="demo-integrity">20%</b></span>
+              <span>burned <b id="demo-burned">0 RF</b></span>
+            </div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------- dive -->
+  <section id="dive">
+    <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">02 — One dive</p>
+        <div class="head" data-text="HOW IT PLAYS" data-scale="5"></div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="steps">
+        <article class="step d1" data-reveal>
+          <figure><img src="docs/03-dive.png" alt="The BITROT playfield: a Friend among spreading blobs of dithered rot" loading="lazy" width="960" height="640" class="pixel"></figure>
+          <h3>Hold the line</h3>
+          <p>Move, purge, dash. Shards are currency and energy; the rot eats them if you are slow. Sectors tighten every 45 seconds and every purge starts costing more.</p>
+        </article>
+
+        <article class="step d2" data-reveal>
+          <figure><img src="docs/04-dive-late.png" alt="Late in a dive, the rot holds most of the arena" loading="lazy" width="960" height="640" class="pixel"></figure>
+          <h3>Get them out</h3>
+          <p>Capsules surface every 19 seconds and survive six seconds buried — purge one free. Rescuing is also the only thing that restores your integrity.</p>
+        </article>
+
+        <article class="step d3" data-reveal>
+          <figure><img src="docs/05-report.png" alt="The dive report, showing the simulated RF payout breakdown" loading="lazy" width="960" height="640" class="pixel"></figure>
+          <h3>Cash the run</h3>
+          <p>Every RF you earned, itemised. Then the only question that matters: spend it on gear, or burn it on a Friend?</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- friends -->
+  <section id="friends">
+    <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">03 — The collection</p>
+        <div class="head" data-text="EVERY FRIEND IS A NUMBER" data-scale="4"></div>
+        <div class="rule"></div>
+      </div>
+    </div>
+
+    <div class="marquee" data-reveal aria-hidden="true">
+      <div class="marquee-track" id="marquee-track"></div>
+    </div>
+
+    <div class="wrap">
+      <div class="roller d1" data-reveal>
+        <div class="roll-portrait">
+          <canvas id="roll-portrait" class="pixel" aria-label="A procedurally generated Rare Friend portrait"></canvas>
+        </div>
+        <div>
+          <div class="roll-head">
+            <h3 class="roll-name" id="roll-name">—</h3>
+            <span class="roll-rarity" id="roll-rarity">—</span>
+          </div>
+          <p class="copy">
+            Form, crest, optics, gear, marking, rarity, generation, name, perk and the exact order
+            its pixels come back in are all pure functions of one six-digit id — the same
+            relationship a tokenId has to a Generations NFT. Swap one function and the portraits
+            become the canonical artwork.
+          </p>
+          <dl class="traits">
+            <div class="trait"><dt>ID</dt><dd id="t-id">—</dd></div>
+            <div class="trait"><dt>Generation</dt><dd id="t-gen">—</dd></div>
+            <div class="trait"><dt>Form / crest</dt><dd id="t-form">—</dd></div>
+            <div class="trait"><dt>Optics / vox</dt><dd id="t-optics">—</dd></div>
+            <div class="trait"><dt>Gear / mark</dt><dd id="t-gear">—</dd></div>
+            <div class="trait"><dt>Perk at 100%</dt><dd id="t-perk">—</dd></div>
+          </dl>
+          <div class="roll-actions">
+            <button class="btn" id="roll-btn" type="button"><span>Roll another</span></button>
+            <a class="btn ghost" href="play.html"><span>Go rescue one</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ---------------------------------------------------------- economy -->
+  <section id="economy">
+    <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">04 — Simulated $RAREFRIENDS</p>
+        <div class="head" data-text="TWO SINKS, ONE WALLET" data-scale="4"></div>
+        <div class="rule"></div>
+        <p class="copy">
+          Every run poses the same question, and the two answers pull against each other. That is the
+          whole economy — a faucet you have to earn and two sinks that want the same coins.
+        </p>
+      </div>
+
+      <div class="sinks">
+        <article class="sink d1" data-reveal>
+          <span class="tag">Sink one</span>
+          <h3>Upgrades — spent</h3>
+          <p>Permanent dive gear. RF leaves your wallet, but in the fiction the supply is unchanged.</p>
+          <table class="ledger">
+            <thead><tr><th>Line</th><th>Levels</th><th>RF</th></tr></thead>
+            <tbody>
+              <tr><td>Purge coil</td><td>4</td><td>45 → 420</td></tr>
+              <tr><td>Cell bank</td><td>4</td><td>40 → 380</td></tr>
+              <tr><td>Scar etch</td><td>3</td><td>55 → 260</td></tr>
+              <tr><td>Core plate</td><td>2</td><td>150 → 420</td></tr>
+              <tr><td>Drift boots</td><td>3</td><td>60 → 300</td></tr>
+              <tr><td>Lode coil</td><td>3</td><td>50 → 250</td></tr>
+            </tbody>
+          </table>
+        </article>
+
+        <article class="sink burn d2" data-reveal>
+          <span class="tag">Sink two</span>
+          <h3>Restoration — burned</h3>
+          <p>RF spent rebuilding a Friend is destroyed and tracked separately. The last pixels cost the most, and the perk only unlocks at 100%.</p>
+          <table class="ledger">
+            <thead><tr><th>Rarity</th><th>Odds</th><th>RF to whole</th></tr></thead>
+            <tbody>
+              <tr><td>Common</td><td>62%</td><td>~240</td></tr>
+              <tr><td>Rare</td><td>26%</td><td>~430</td></tr>
+              <tr><td>Epic</td><td>9.5%</td><td>~705</td></tr>
+              <tr><td>Genesis</td><td>2.5%</td><td>~1220</td></tr>
+            </tbody>
+          </table>
+          <p class="sink-note">
+            A restored Genesis Friend is the end of the chase — about three fully-geared dives of RF,
+            burned into one portrait.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ------------------------------------------------------------- tech -->
+  <section id="tech">
+    <div class="wrap">
+      <div data-reveal>
+        <p class="eyebrow">05 — Under the hood</p>
+        <div class="head" data-text="TWO COLOURS" data-scale="5"></div>
+        <div class="rule"></div>
+      </div>
+
+      <div class="stats" data-reveal>
+        <div class="stat"><b data-count="0">0</b><span>Dependencies</span></div>
+        <div class="stat"><b data-count="2">0</b><span>Colours</span></div>
+        <div class="stat"><b data-count="480" data-suffix="×320">0</b><span>Logical pixels</span></div>
+        <div class="stat"><b data-count="163">0</b><span>Passing tests</span></div>
+      </div>
+
+      <ul class="tech-list d2" data-reveal>
+        <li>Everything renders into a single <strong>Uint8Array of 0s and 1s</strong>, blitted with integer scaling. Shading exists only as ordered dithering, so rot density reads as age.</li>
+        <li>The purge shockwave is literally an <strong>XOR of the framebuffer</strong>. The inverted palette is exact, not themed.</li>
+        <li>Both fonts — 5×7 and a 4×6 micro — are <strong>hand-drawn bitmaps</strong>. No webfont, no antialiasing. The headings on this page use them too.</li>
+        <li>The picture is presented through <strong>Scale2x</strong>, which rounds off single-pixel corners on the way to the screen. Still pixel art, just a finer grain — and a toggle for anyone who wants hard edges.</li>
+        <li>All audio is generated live by a small <strong>square-wave synth</strong>. No audio files.</li>
+        <li><strong>No build step.</strong> Plain ES modules, served as-is. The repository root is the site.</li>
+        <li>The logical screen presents at <strong>960×640</strong> — the same viewport FriendSDK reference games use.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- ----------------------------------------------------------- finale -->
+  <section id="finale">
+    <div class="wrap">
+      <div data-reveal>
+        <div class="head" data-text="GO GET THEM OUT" data-scale="6"></div>
+        <p class="copy">
+          One dive is about ninety seconds. You will lose the first few. That is the point.
+        </p>
+        <div class="cta">
+          <a class="btn solid" href="play.html"><span>Enter the archive</span></a>
+        </div>
+
+        <div class="signoff" data-reveal>
+          <p class="signoff-line">One prompt. One Rare Friend. Ten days.</p>
+          <div class="signoff-mark" data-text="KAMIYAHAME" data-scale="3"></div>
+          <p class="signoff-sub">Built for the Rare Friends Vibeathon, September 2026</p>
+          <div class="cta">
+            <a class="btn" href="https://x.com/kamiyahame" target="_blank" rel="noopener"><span>&#120143; / Twitter</span></a>
+            <a class="btn" href="https://github.com/kamideathless" target="_blank" rel="noopener"><span>GitHub</span></a>
+            <a class="btn ghost" href="https://github.com/spokesz/rarefriends-vibeathon" target="_blank" rel="noopener"><span>The Vibeathon</span></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-row">
+      <span>BITROT — made by <a href="https://x.com/kamiyahame" target="_blank" rel="noopener">kamiyahame</a>
+        for the <a href="https://github.com/spokesz/rarefriends-vibeathon" target="_blank" rel="noopener">Rare Friends Vibeathon</a>, September 2026</span>
+      <span>
+        <a href="play.html">Play</a> ·
+        <a href="https://x.com/kamiyahame" target="_blank" rel="noopener">Twitter</a> ·
+        <a href="https://github.com/kamideathless" target="_blank" rel="noopener">GitHub</a>
+      </span>
+    </div>
+    <p class="disclaimer">
+      <b>All balances, purchases and rewards in BITROT are simulated.</b> No wallet is connected, no
+      chain is touched, and no real $RAREFRIENDS is minted, spent or burned. Balances are rows in the
+      game's own database — real records, simply not tokens. Friend portraits are procedural
+      placeholders, not Rare Friends artwork. MIT licensed.
+    </p>
+  </div>
+</footer>
+
+<noscript>
+  <div class="wrap noscript-box">
+    <h1>BITROT</h1>
+    <p>This page needs JavaScript — it renders itself with the game's own engine.</p>
+    <p><a href="play.html">The game is here.</a></p>
+  </div>
+</noscript>
+
+<script type="module" src="src/landing/landing.js"></script>
+</body>
+</html>

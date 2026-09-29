@@ -1,0 +1,20 @@
+{
+  "name": "bitrot",
+  "version": "1.0.0",
+  "private": true,
+  "description": "BITROT - a 1-bit cellular-automaton arcade game with a server-verified economy, for the Rare Friends Vibeathon",
+  "type": "module",
+  "scripts": {
+    "start": "node server/main.mjs",
+    "dev": "node server/main.mjs",
+    "test": "node --test \"tests/**/*.test.js\"",
+    "tune": "node tools/tune.mjs",
+    "shots": "node tools/shots.mjs",
+    "portraits": "node tools/portraits.mjs",
+    "check": "node tools/check.mjs && npm test"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "license": "MIT"
+}

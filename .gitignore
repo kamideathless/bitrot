@@ -1,0 +1,12 @@
+node_modules/
+.DS_Store
+Thumbs.db
+*.log
+.idea/
+.vscode/
+
+# server database
+data/
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm

@@ -1,0 +1,50 @@
+name: test and deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          # node:sqlite, used by the server, needs 22.5+
+          node-version: '22'
+      - name: Import every module
+        run: node tools/check.mjs
+      - name: Unit, server and integration tests
+        run: npm test
+
+  deploy:
+    needs: test
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      # No build step: the repository root is the site.
+      #
+      # GitHub Pages is static, so this deploys the *sandbox* build: the landing
+      # page and a fully playable game whose progress is local and unverified.
+      # Verified play and the leaderboard need `npm start` (server/main.mjs) on
+      # a host that can run Node.
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: .
+      - id: deployment
+        uses: actions/deploy-pages@v4

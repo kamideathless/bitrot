@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="color-scheme" content="light dark">
+<title>BITROT — play</title>
+<meta name="description" content="BITROT: a 1-bit cellular-automaton arcade game. Dive into a decaying archive, purge the static, rescue Rare Friends before they are lost.">
+<meta property="og:title" content="BITROT — a Rare Friends rescue">
+<meta property="og:description" content="The archive is decaying. Purge the static, rescue the Friends, burn RF to restore their pixels.">
+<meta property="og:type" content="website">
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'><rect width='8' height='8' fill='%23111'/><path fill='%23eee' d='M1 1h2v2H1zM5 1h2v2H5zM3 3h2v2H3zM1 5h2v2H1zM5 5h2v2H5z'/></svg>">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a id="back" href="index.html">&lt; BACK</a>
+  <div id="stage">
+    <div id="frame">
+      <canvas id="screen" width="480" height="320" aria-label="BITROT game screen" role="img"></canvas>
+      <div id="crt" aria-hidden="true"></div>
+    </div>
+    <p id="rotate">Turn your phone sideways for a bigger screen.</p>
+    <p id="hint">
+      <b>MOVE</b> WASD / arrows &nbsp;·&nbsp; <b>PURGE</b> Space &nbsp;·&nbsp; <b>DASH</b> Shift &nbsp;·&nbsp;
+      <b>SELECT</b> Enter &nbsp;·&nbsp; <b>BACK</b> Esc &nbsp;·&nbsp; <b>MUTE</b> M
+      <span class="tap">Touch: drag the left pad to move, tap <b>PRG</b> / <b>DSH</b>.</span>
+    </p>
+    <p id="legal">All balances, purchases and rewards in BITROT are <b>simulated</b>. No wallet, no chain, no real $RAREFRIENDS.</p>
+  </div>
+  <div id="live" role="status" aria-live="polite" class="sr-only"></div>
+  <noscript><p class="noscript-note">BITROT needs JavaScript.</p></noscript>
+  <script type="module" src="src/main.js"></script>
+</body>
+</html>
