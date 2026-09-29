@@ -1,8 +1,13 @@
 import { INK, PAPER, W, H } from '../core/gfx.js';
 import { drawText, drawTextCentered, drawTextRight, measure, MICRO } from '../core/font.js';
 import { panel, header, footer, paragraph, friendCard, bar } from '../ui/widgets.js';
-import { PAYOUT, RESTORE_STEP, RESTORE_BASE_COST, BASE_STATS } from '../game/economy.js';
+import { PAYOUT, RESTORE_STEP, RESTORE_BASE_COST, BASE_STATS, sectorMultiplier } from '../game/economy.js';
+import { RARITIES } from '../game/friends.js';
 import { TUNING } from '../game/run.js';
+
+// Derived so the briefing cannot drift away from the numbers the game runs on.
+const SECTOR_BONUS_PCT = Math.round((sectorMultiplier(2) - 1) * 100);
+const SALVAGE = Object.values(RARITIES).map((r) => r.salvage);
 
 const PAGES = [
   {
@@ -192,8 +197,8 @@ function drawEconomy(g, box) {
     ['FRIEND RESCUED', `${PAYOUT.perRescue} RF`],
     ['DEFRAG', `${PAYOUT.perDefrag} RF`],
     ['PER SECTOR', `${PAYOUT.perSector} RF`],
-    ['SECTOR BONUS', '+20% EACH'],
-    ['DUPLICATE', 'SALVAGED 8-70'],
+    ['SECTOR BONUS', `+${SECTOR_BONUS_PCT}% EACH`],
+    ['DUPLICATE', `SALVAGED ${Math.min(...SALVAGE)}-${Math.max(...SALVAGE)}`],
   ];
   earn.forEach(([k, v], i) => {
     const y = box.y + 18 + i * 13;
