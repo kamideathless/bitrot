@@ -8,7 +8,7 @@
 
 # BITROT
 
-**Builder:** kamiyahame ([@kamiyahame](https://x.com/kamiyahame) · [github.com/kamideathless](https://github.com/kamideathless)) &nbsp;|&nbsp; **Category:** Economy Potential &nbsp;|&nbsp; **Stack:** no FriendSDK — vanilla ES modules + canvas on the client, a Node 22 server with `node:sqlite`, **zero dependencies on either side**
+**Builder:** kamiyahame ([@kamiyahame](https://x.com/kamiyahame) · [github.com/kamideathless](https://github.com/kamideathless)) &nbsp;|&nbsp; **Category:** Economy Potential and Token Activity &nbsp;|&nbsp; **Stack:** no FriendSDK — vanilla ES modules + canvas on the client, a Node 22 server with `node:sqlite`, **zero dependencies on either side**
 
 A 1-bit cellular-automaton arcade game where you dive into a decaying Rare Friends archive to pull
 corrupted Friends out of the spreading rot, then **burn simulated $RAREFRIENDS to rebuild the exact
